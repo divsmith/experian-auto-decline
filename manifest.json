@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Experian Auto Decline",
+    "version": "0.0.1",
+    "description": "Automatically decline Experian upgrade offers",
+    "content_scripts": [
+        {
+            "js": ["scripts/decline.js"],
+            "matches": [
+                "https://usa.experian.com/member/*"
+            ]
+        }
+    ]
+}
