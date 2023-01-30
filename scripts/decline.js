@@ -4,7 +4,11 @@ var found = false;
 var interval;
 
 function decline() {
-    if (interval && (found || attempts > maxAttempts)) {
+    if (found) {
+        clearInterval(interval);
+    }
+
+    if (attempts > maxAttempts) {
         clearInterval(interval);
     }
 
