@@ -13,7 +13,8 @@
         {
             "js": ["scripts/decline.js"],
             "matches": [
-                "https://usa.experian.com/member/*"
+                "https://usa.experian.com/member/*",
+                "https://usa.experian.com/mfe/member/*"
             ]
         }
     ]

@@ -1,24 +1,46 @@
-var maxAttempts = 20;
-var attempts = 0;
-var found = false;
-var interval;
+(function () {
+    'use strict';
 
-function decline() {
-    if (found) {
-        clearInterval(interval);
+    const MAX_ATTEMPTS = 20;
+    const POLLING_TIMEOUT_MS = 10000; // Stop polling after 10 seconds
+    let attempts = 0;
+    let observer;
+
+    function attemptDecline() {
+        try {
+            if (attempts >= MAX_ATTEMPTS) {
+                if (observer) {
+                    observer.disconnect();
+                }
+                return;
+            }
+
+            let declineButton = document.querySelector('button.ecs-next-button--secondary');
+
+            if (declineButton) {
+                declineButton.click();
+                if (observer) {
+                    observer.disconnect();
+                }
+            } 
+        } catch (error) {
+            console.error("Experian Auto Decline error:", error);
+            if (observer) {
+                observer.disconnect();
+            }
+        } finally {
+            attempts++;
+        }
     }
 
-    if (attempts > maxAttempts) {
-        clearInterval(interval);
-    }
+    const config = { childList: true, subtree: true };
+    observer = new MutationObserver(attemptDecline);
+    observer.observe(document.body, config);
 
-    var declineButton = document.querySelector('button.ecs-next-button');
-    if (declineButton) {
-        declineButton.click();
-        found = true;
-    }
+    setTimeout(() => {
+        if (observer) {
+            observer.disconnect();
+        }
+    }, POLLING_TIMEOUT_MS);
 
-    attempts++;
-}
-
-interval = setInterval(decline, 500);
+})();
